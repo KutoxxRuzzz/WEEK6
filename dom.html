@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Praktikum DOM - UMN</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"] {
+            width: 300px;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="judul">
+        <h1>Contoh Penggunaan DOM</h1>
+    </div>
+    
+    <div id="sisip"></div>
+    
+    <div id="bungkus">
+        <ul id="menu">
+            <li>Halaman Utama</li>
+            <li><a href="profil.html">Profil</a></li>
+            <li><a href="artikel.html">Artikel</a></li>
+            <li><a href="galeri.html">Galeri</a></li>
+            <li><a href="testimonial.html">Testimonial</a></li>
+            <li><a href="kontak.html">Kontak</a></li>
+        </ul>
+    </div>
+    
+    <div id="fungsi">
+        <h2>Fungsi DOM</h2>
+    </div>
+    
+    <div id="coba-fungsi">
+        <ol>
+            <li><a href="javascript:ubahNodeValue()">Ganti Node Value dari Galeri</a></li>
+            <li><a href="javascript:periksaProperti()">Periksa Properti dari Menu ke-4</a></li>
+            <li><a href="javascript:ubahAtribut()">Ganti Atribut dari link Galeri</a></li>
+            <li><a href="javascript:tambahAnak()">Menambah Anak Bontot</a></li>
+            <li><a href="javascript:bikinKembaran()">Bikin Kembaran dari Galeri</a></li>
+            <li><a href="javascript:sisipAnak()">Nyisipin Anak di antara Galeri dan Testimonial</a></li>
+            <li><a href="javascript:gantiAnak()">Ganti Node</a></li>
+        </ol>
+    </div>
+
+    <hr style="margin: 40px 0;">
+
+    <h2>Document Object Model (DOM)</h2>
+    <h3>Pendaftaran Kelompok</h3>
+    
+    <div class="form-group">
+        <label>Nama Kelompok</label>
+        <input type="text" id="namaKelompok" placeholder="Nama Kelompok">
+    </div>
+
+    <div class="form-group">
+        <label>Jumlah Anggota</label>
+        <input type="number" id="jumlahAnggota" placeholder="Jumlah Anggota" oninput="generateAnggota()">
+    </div>
+
+    <div id="containerAnggota"></div>
+
+    <div class="form-group" id="btnDaftarWrapper" style="display: none;">
+        <button type="button" onclick="daftarKelompok()">Daftar Kelompok</button>
+    </div>
+
+    <script type="text/javascript">
+        function ubahNodeValue() {
+            var a = document.getElementById("menu").getElementsByTagName("a")[2].firstChild;
+            a.nodeValue = "Foto";
+            var b = "<p>Galeri berubah menjadi Foto</p>";
+            document.getElementById("sisip").innerHTML = b;
+        }
+
+        function periksaProperti() {
+            var a = document.getElementById("menu").getElementsByTagName("a")[2].firstChild;
+            var b = "<p>nodeName: " + a.nodeName;
+            b += "<br />nodeType: " + a.nodeType;
+            b += "<br />nodeValue: " + a.nodeValue + "</p>";
+            document.getElementById("sisip").innerHTML = b;
+        }
+
+        function ubahAtribut() {
+            var a = document.getElementById("menu").getElementsByTagName("li")[3].firstChild;
+            a.setAttribute("href", "http://facebook.com");
+            var b = "<p>Link dari Galeri telah berubah dari galeri.html menjadi facebook.com</p>";
+            document.getElementById("sisip").innerHTML = b;
+        }
+
+        function tambahAnak() {
+            var a = document.createElement("li");
+            var b = document.createTextNode("Tambah anak lagi");
+            a.appendChild(b);
+            var c = document.getElementById("menu");
+            c.appendChild(a);
+            var d = "<p>Anak dari menu bertambah</p>";
+            document.getElementById("sisip").innerHTML = d;
+        }
+
+        function bikinKembaran() {
+            var a = document.getElementById("menu").getElementsByTagName("li")[3];
+            var b = a.cloneNode(true);
+            var c = document.getElementById("menu");
+            c.appendChild(b);
+            var d = "<p>Galeri berhasil dikloning dan jadi anak bontot</p>";
+            document.getElementById("sisip").innerHTML = d;
+        }
+
+        function sisipAnak() {
+            var a = document.createElement("li");
+            var b = document.createTextNode("Anak Sisipan");
+            a.appendChild(b);
+            var c = document.getElementById("menu");
+            var d = c.getElementsByTagName("li")[4];
+            c.insertBefore(a, d);
+            var e = "<p>Berhasil nyisipin anak antara Galeri dan Testimonial</p>";
+            document.getElementById("sisip").innerHTML = e;
+        }
+
+        function gantiAnak() {
+            var a = document.getElementById("menu");
+            var b = a.getElementsByTagName("li")[5];
+            var c = document.createElement("li");
+            var d = document.createTextNode("Anak Baru");
+            c.appendChild(d);
+            a.replaceChild(c, b);
+            var msg = "<p>Menu yang ke-6 diganti jadi Anak Baru</p>";
+            document.getElementById("sisip").innerHTML = msg;
+        }
+
+        function generateAnggota() {
+            const jumlah = document.getElementById("jumlahAnggota").value;
+            const container = document.getElementById("containerAnggota");
+            const btnWrapper = document.getElementById("btnDaftarWrapper");
+            
+            container.innerHTML = "";
+
+            if (jumlah > 0) {
+                let heading = document.createElement("div");
+                heading.innerHTML = "<label><strong>Anggota Kelompok:</strong></label>";
+                container.appendChild(heading);
+
+                for (let i = 1; i <= jumlah; i++) {
+                    let div = document.createElement("div");
+                    div.className = "form-group";
+                    
+                    let input = document.createElement("input");
+                    input.type = "text";
+                    input.id = "anggota" + i;
+                    input.placeholder = "Nama Anggota " + i;
+                    
+                    div.appendChild(input);
+                    container.appendChild(div);
+                }
+
+                btnWrapper.style.display = "block";
+            } else {
+                btnWrapper.style.display = "none";
+            }
+        }
+
+        function daftarKelompok() {
+            const namaKelompok = document.getElementById("namaKelompok").value;
+            const jumlah = document.getElementById("jumlahAnggota").value;
+            
+            if (!namaKelompok) {
+                alert("Silakan isi nama kelompok terlebih dahulu!");
+                return;
+            }
+
+            let info = "Kelompok: " + namaKelompok + "\nJumlah Anggota: " + jumlah + "\n\nDaftar Anggota:\n";
+            for (let i = 1; i <= jumlah; i++) {
+                let namaAnggota = document.getElementById("anggota" + i).value;
+                info += "- " + (namaAnggota || `Anggota ${i} (Kosong)`) + "\n";
+            }
+
+            alert(info);
+        }
+    </script>
+</body>
+</html>
